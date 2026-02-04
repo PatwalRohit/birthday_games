@@ -16,7 +16,7 @@ body {
 }
 
 /* COMMON */
-.hidden { display: none; }
+.hidden { display: none !important; }
 .center {
   height: 100vh;
   display: flex;
@@ -27,6 +27,7 @@ body {
   background: linear-gradient(#b9a6f5, #fbeaff);
   color: #3c2a6a;
 }
+
 
 /* 🌙 ROAD SCENE */
 #roadScene {
@@ -95,9 +96,15 @@ body {
 }
 
 /* 🎂 Cake Scene Overlay */
-#cakeScene {
-  cursor: pointer;
-  user-select: none;
+#cakeScene,
+#birthdayScene {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  pointer-events: auto;
+  background: linear-gradient(#b9a6f5, #fbeaff)
 }
 
 /* Cake emoji */
@@ -194,7 +201,7 @@ document.getElementById("castle").addEventListener("pointerdown", (e) => {
 });
 
 /* 🎂 CAKE → BIRTHDAY (FULL SCREEN TAP) */
-cake.addEventListener("pointerdown", () => {
+cake.addEventListener("click", () => {
   cake.classList.add("hidden");
   birthday.classList.remove("hidden");
 });
