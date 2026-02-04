@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Birthday Niyati 💜</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: "Georgia", serif;
+    background: linear-gradient(#2c1b47, #4b2c7a);
+    color: white;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .center {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .hidden { display: none; }
+
+  .btn {
+    padding: 12px 22px;
+    border-radius: 20px;
+    background: #c6a4ff;
+    color: #2c1b47;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
+  .letters span {
+    font-size: 48px;
+    margin: 12px;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .cake {
+    font-size: 90px;
+    cursor: pointer;
+    animation: glow 2s infinite alternate;
+  }
+
+  @keyframes glow {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+  }
+
+  @keyframes fall {
+    from { transform: translateY(-200px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- 🌙 INTRO -->
+<div id="intro" class="center">
+  <div style="font-size:60px;">🌙✨🧚‍♀️</div>
+  <h2>Niyati Fairy has a surprise</h2>
+  <p>Tap to begin 💜</p>
+  <button class="btn" onclick="startPuzzle()">Start</button>
+</div>
+
+<!-- 🧩 PUZZLE -->
+<div id="puzzle" class="center hidden">
+  <div style="font-size:50px;">🧚‍♀️🌙✨</div>
+  <p>Tap the letters to form your name 💜</p>
+
+  <div class="letters" id="letters"></div>
+  <p id="hint"></p>
+</div>
+
+<!-- 🏰 CASTLE -->
+<div id="castle" class="center hidden">
+  <div style="font-size:70px;">🏰✨🌙</div>
+  <p>Tap the castle to enter</p>
+  <button class="btn" onclick="showCake()">Enter Castle</button>
+</div>
+
+<!-- 🎂 CAKE -->
+<div id="cake" class="center hidden">
+  <div class="cake" onclick="showWish()">🎂🍍</div>
+  <p>Tap the pineapple cake to cut it 💜</p>
+</div>
+
+<!-- 🎉 WISH -->
+<div id="wish" class="center hidden">
+  <div style="animation: fall 1.5s;">
+    <div style="font-size:60px;">🌹🌹🌹</div>
+    <h1>Happy Birthday</h1>
+    <h2>Dear Niyati 💜</h2>
+    <p>👩‍⚕️🌙🧚‍♀️✨</p>
+    <div style="font-size:40px;">🎉🎈🎊</div>
+  </div>
+</div>
+
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const nameLetters = ["N","I","Y","A","T","I"];
+  let index = 0;
+
+  function startPuzzle() {
+    document.getElementById("intro").classList.add("hidden");
+    document.getElementById("puzzle").classList.remove("hidden");
+    loadLetters();
+  }
+
+  function loadLetters() {
+    const container = document.getElementById("letters");
+    container.innerHTML = "";
+    index = 0;
+
+    const shuffled = [...nameLetters].sort(() => Math.random() - 0.5);
+
+    shuffled.forEach(letter => {
+      const span = document.createElement("span");
+      span.innerText = letter;
+
+      span.onclick = () => {
+        if (letter === nameLetters[index]) {
+          span.style.color = "#7CFFB2";
+          index++;
+          document.getElementById("hint").innerText = "✨ Perfect… keep going";
+
+          if (index === nameLetters.length) {
+            setTimeout(() => {
+              document.getElementById("puzzle").classList.add("hidden");
+              document.getElementById("castle").classList.remove("hidden");
+            }, 600);
+          }
+        } else {
+          span.style.color = "#ff7b7b";
+          setTimeout(() => span.style.color = "white", 300);
+        }
+      };
+
+      container.appendChild(span);
+    });
+  }
+
+  function showCake() {
+    document.getElementById("castle").classList.add("hidden");
+    document.getElementById("cake").classList.remove("hidden");
+  }
+
+  function showWish() {
+    document.getElementById("cake").classList.add("hidden");
+    document.getElementById("wish").classList.remove("hidden");
+  }
+</script>
+
+</body>
+</html>
