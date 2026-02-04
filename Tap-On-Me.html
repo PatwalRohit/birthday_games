@@ -1,182 +1,199 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>Happy Birthday Niyati 🌙</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Journey for Niyati 💜</title>
+
 <style>
 body {
-margin: 0;
-background: linear-gradient(#d8c9ff, #87ceeb);
-overflow: hidden;
-font-family: 'Trebuchet MS', sans-serif;
+  margin: 0;
+  font-family: 'Georgia', serif;
+  overflow: hidden;
+  text-align: center;
 }
-#msg {
-position: absolute;
-top: 15px;
-width: 100%;
-text-align: center;
-color: #4b2c83;
-font-size: 18px;
-z-index: 10;
+
+/* BACKGROUND */
+#roadScene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(#3b2f63, #8e82c9);
 }
-canvas { display: block; }
-.flower, .balloon, .popper {
-position: absolute;
-font-size: 28px;
-animation: float 4s linear forwards;
+
+/* MOON */
+.moon {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  width: 120px;
+  height: 120px;
+  background: #fff8dc;
+  border-radius: 50%;
+  box-shadow: 0 0 40px #fff;
 }
-.balloon {
-bottom: -40px;
-animation: rise 6s linear forwards;
+
+/* STARS */
+.star {
+  position: absolute;
+  color: white;
+  animation: twinkle 2s infinite alternate;
 }
+
+@keyframes twinkle {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+/* FAIRY */
+.fairy {
+  position: absolute;
+  font-size: 28px;
+  animation: float 4s infinite ease-in-out;
+}
+
 @keyframes float {
-to { transform: translateY(110vh); opacity: 0; }
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
 }
-@keyframes rise {
-to { transform: translateY(-120vh); opacity: 0; }
+
+/* DOCTOR ON SCOOTY */
+#doctorScooty {
+  position: absolute;
+  bottom: 70px;
+  left: 20px;
+  width: 90px;
+  transition: left 0.3s;
+}
+
+/* CASTLE */
+#castle {
+  position: absolute;
+  bottom: 60px;
+  right: 20px;
+  width: 150px;
+  cursor: pointer;
+}
+
+/* TEXT */
+.hint {
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  color: white;
+  font-size: 18px;
+}
+
+/* SCENES */
+.hidden { display: none; }
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(#b9a6f5, #fbeaff);
+}
+
+/* CAKE */
+#cakeScene img {
+  width: 200px;
+  cursor: pointer;
+}
+
+/* BIRTHDAY */
+#birthdayDoctor {
+  width: 120px;
+  margin-bottom: 20px;
+  animation: float 2s infinite ease-in-out;
+}
+
+.flowers {
+  font-size: 34px;
+  animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+  from { transform: translateY(-120px); opacity: 1; }
+  to { transform: translateY(300px); opacity: 0; }
 }
 </style>
 </head>
+
 <body>
-<div id="msg">🛵 Tap anywhere to start the journey</div>
-<canvas id="game"></canvas>
+
+<audio id="bgMusic" loop>
+  <source src="bg-music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ROAD SCENE -->
+<div id="roadScene">
+  <div class="moon"></div>
+
+  <div class="star" style="top:60px;left:50px;">✨</div>
+  <div class="star" style="top:120px;left:200px;">✨</div>
+  <div class="star" style="top:90px;left:320px;">✨</div>
+
+  <div class="fairy" style="top:180px;left:80px;">🧚‍♀️</div>
+  <div class="fairy" style="top:220px;right:120px;">🧚‍♀️</div>
+
+  <img src="doctor.png" id="doctorScooty">
+  <img src="castle.png" id="castle">
+
+  <div class="hint">
+    Tap anywhere to help Rapunzel reach her castle 🏰
+  </div>
+</div>
+
+<!-- CAKE SCENE -->
+<div id="cakeScene" class="hidden center">
+  <h2>Make a wish and tap the cake 🎂</h2>
+  <img src="cake.png" id="cake">
+</div>
+
+<!-- BIRTHDAY SCENE -->
+<div id="birthdayScene" class="hidden center">
+  <img src="doctor.png" id="birthdayDoctor">
+  <h1>
+    Happy Birthday<br>
+    Dear Niyati 💜
+  </h1>
+  <div class="flowers">🌸 🌹 🌸 🎉 🎈</div>
+</div>
+
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-/* STATES */
-const JOURNEY = 0;
-const CASTLE = 1;
-const CAKE = 2;
-const BIRTHDAY = 3;
-let state = JOURNEY;
-let progress = 0;
-/* TAP HANDLER */
-canvas.addEventListener("click", handleTap);
-canvas.addEventListener("touchstart", handleTap);
-function handleTap(e){
-const x = e.clientX || e.touches?.[0].clientX;
-const y = e.clientY || e.touches?.[0].clientY;
-if(state === JOURNEY){
-progress += 90;
-if(progress >= 1600){
-state = CASTLE;
-document.getElementById("msg").innerHTML =
-"🏰 You’ve arrived — tap the castle to enter 💜";
-}
-}
-else if(state === CASTLE){
-// Castle hitbox
-if(x > canvas.width/2 - 60 && x < canvas.width/2 + 60 &&
-y > canvas.height/2 - 260 && y < canvas.height/2 - 140){
-state = CAKE;
-document.getElementById("msg").innerHTML =
-"🎂 Tap the cake to cut it";
-}
-}
-else if(state === CAKE){
-// Cake hitbox
-if(x > canvas.width/2 - 60 && x < canvas.width/2 + 60 &&
-y > canvas.height/2 - 40 && y < canvas.height/2 + 40){
-state = BIRTHDAY;
-document.getElementById("msg").innerHTML = "";
-celebrate();
-}
-}
-}
-/* DRAW FUNCTIONS */
-function drawNature(){
-ctx.font = "36px serif";
-for(let i=0;i<8;i++){
-ctx.fillText("🌳", i*160 - (progress%160), canvas.height-190);
-ctx.fillText("🌸", i*120 - (progress%120), canvas.height-150);
-}
-ctx.fillText("️", canvas.width/2 - (progress%400), canvas.height-280);
-ctx.fillText("🐦", canvas.width - (progress%300), 100);
-ctx.fillStyle="#4da6ff";
-ctx.fillRect(0, canvas.height-240, canvas.width, 14);
-}
-function drawRoad(){
-ctx.fillStyle="#555";
-ctx.fillRect(0, canvas.height-120, canvas.width, 90);
-}
-function drawScooty(){
-ctx.font="40px serif";
-ctx.fillText("‍🛵", 80, canvas.height-65);
-}
-function drawCastle(){
-ctx.font="70px serif";
-ctx.fillText("🏰", canvas.width/2-40, canvas.height/2-200);
-}
-function drawCake(){
-ctx.font="70px serif";
-ctx.fillText("🍍🎂", canvas.width/2-50, canvas.height/2);
-}
-function drawBirthday(){
-ctx.textAlign="center";
-ctx.font="36px serif";
-ctx.fillStyle="#4b2c83";
-ctx.fillText("Happy Birthday 💜", canvas.width/2, canvas.height/2-60);
-ctx.fillText("Dear Niyati 🌙", canvas.width/2, canvas.height/2-10);
-ctx.font="24px serif";
-ctx.fillText("May your life bloom with joy ✨",
-canvas.width/2, canvas.height/2+40);
-ctx.fillText("‍⚕️🌸", canvas.width/2, canvas.height/2+90);
-}
-/* CELEBRATION EFFECTS */
-function celebrate(){
-for(let i=0;i<25;i++){
-let f=document.createElement("div");
-f.className="flower";
-f.innerHTML="🌸";
-f.style.left=Math.random()*100+"vw";
-f.style.top="-20px";
-document.body.appendChild(f);
-setTimeout(()=>f.remove(),4000);
-}
-for(let i=0;i<10;i++){
-let b=document.createElement("div");
-b.className="balloon";
-b.innerHTML="🎈";
-b.style.left=Math.random()*100+"vw";
-document.body.appendChild(b);
-setTimeout(()=>b.remove(),6000);
-}
-for(let i=0;i<8;i++){
-let p=document.createElement("div");
-p.className="popper";
-p.innerHTML="🎉";
-p.style.left=Math.random()*100+"vw";
-p.style.top=Math.random()*50+"vh";
-document.body.appendChild(p);
-setTimeout(()=>p.remove(),3000);
-}
-}
-/* MAIN LOOP */
-function loop(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-if(state === JOURNEY){
-drawNature();
-drawRoad();
-drawScooty();
-}
-else if(state === CASTLE){
-drawNature();
-drawRoad();
-drawScooty();
-drawCastle();
-}
-else if(state === CAKE){
-drawCake();
-}
-else if(state === BIRTHDAY){
-drawBirthday();
-}
-requestAnimationFrame(loop);
-}
-loop();
+let x = 20;
+let reachedCastle = false;
+
+const doctor = document.getElementById("doctorScooty");
+const castle = document.getElementById("castle");
+const music = document.getElementById("bgMusic");
+
+document.body.addEventListener("click", () => {
+  music.play().catch(()=>{});
+  if (reachedCastle) return;
+
+  x += 40;
+  doctor.style.left = x + "px";
+
+  const stopPoint = window.innerWidth - 220;
+  if (x >= stopPoint) {
+    reachedCastle = true;
+  }
+});
+
+castle.addEventListener("click", () => {
+  if (!reachedCastle) return;
+  document.getElementById("roadScene").classList.add("hidden");
+  document.getElementById("cakeScene").classList.remove("hidden");
+});
+
+document.getElementById("cake").addEventListener("click", () => {
+  document.getElementById("cakeScene").classList.add("hidden");
+  document.getElementById("birthdayScene").classList.remove("hidden");
+});
 </script>
+
 </body>
 </html>
