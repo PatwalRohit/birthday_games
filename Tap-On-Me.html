@@ -6,46 +6,114 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+* { box-sizing: border-box; }
 body {
   margin: 0;
+  font-family: Georgia, serif;
   overflow: hidden;
-  font-family: 'Georgia', serif;
   background: linear-gradient(#3c2a6a, #9b8ad8);
+  touch-action: manipulation;
 }
 
+/* COMMON */
 .hidden { display: none; }
-
 .center {
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   text-align: center;
   background: linear-gradient(#b9a6f5, #fbeaff);
   color: #3c2a6a;
 }
 
-/* ROAD */
-#roadScene { position: relative; height: 100vh; color:white; }
-.moon { position:absolute; top:25px; right:25px; font-size:80px; }
-#doctorScooty { position:absolute; bottom:70px; left:20px; font-size:42px; transition:left .3s; }
-#castle { position:absolute; bottom:65px; right:20px; font-size:64px; }
-#hint { position:absolute; top:15px; width:100%; text-align:center; }
-
-/* CAKE FULLSCREEN TAP */
-#cakeScene {
-  cursor: pointer;
+/* 🌙 ROAD SCENE */
+#roadScene {
+  position: relative;
+  height: 100vh;
+  color: white;
 }
 
+/* Moon */
+.moon {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  font-size: 80px;
+}
+
+/* Fairy (FIXED & VISIBLE) */
+.fairy {
+  position: absolute;
+  top: 140px;
+  left: 40px;
+  font-size: 34px;
+  animation: fairyFloat 4s ease-in-out infinite;
+}
+@keyframes fairyFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+/* Stars */
+.star {
+  position: absolute;
+  font-size: 20px;
+  animation: twinkle 2s infinite alternate;
+}
+@keyframes twinkle {
+  from { opacity: .4; }
+  to { opacity: 1; }
+}
+
+/* Doctor on scooty */
+#doctor {
+  position: absolute;
+  bottom: 80px;
+  left: 20px;
+  font-size: 42px;
+  transition: left 0.25s linear;
+}
+
+/* Castle */
+#castle {
+  position: absolute;
+  bottom: 80px;
+  right: 20px;
+  font-size: 64px;
+}
+
+/* Hint */
+#hint {
+  position: absolute;
+  top: 15px;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+}
+
+/* 🎂 Cake Scene Overlay */
+#cakeScene {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Cake emoji */
 #cakeEmoji {
   font-size: 90px;
   margin: 20px 0;
 }
 
-.tapHint {
-  font-size: 16px;
-  opacity: 0.7;
+/* Flowers */
+.flowers {
+  font-size: 34px;
+  animation: fall 3s linear infinite;
+}
+@keyframes fall {
+  from { transform: translateY(-120px); opacity: 1; }
+  to { transform: translateY(300px); opacity: 0; }
 }
 </style>
 </head>
@@ -56,65 +124,79 @@ body {
   <source src="bg-music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- ROAD -->
+<!-- 🌙 ROAD SCENE -->
 <div id="roadScene">
   <div class="moon">🌕</div>
-  <div id="doctorScooty">👩‍⚕️🛵</div>
+
+  <div class="star" style="top:80px; left:120px;">✨</div>
+  <div class="star" style="top:140px; left:240px;">✨</div>
+
+  <div class="fairy">🧚‍♀️</div>
+
+  <div id="doctor">👩‍⚕️🛵</div>
   <div id="castle">🏰</div>
+
   <div id="hint">Tap anywhere to help Rapunzel reach her castle 🏰</div>
 </div>
 
-<!-- CAKE -->
+<!-- 🎂 CAKE SCENE -->
 <div id="cakeScene" class="hidden center">
   <h2>She reached safely 💜</h2>
   <div id="cakeEmoji">🍍🎂</div>
-  <div class="tapHint">Tap anywhere to cut the cake 🎂</div>
+  <p>Tap anywhere to cut the cake</p>
 </div>
 
-<!-- BIRTHDAY -->
+<!-- 🎉 BIRTHDAY SCENE -->
 <div id="birthdayScene" class="hidden center">
-  <div style="font-size:48px;">👩‍⚕️🌸🌹</div>
+  <div style="font-size:50px;">👩‍⚕️🌸🌹</div>
   <h1>Happy Birthday<br>Dear Niyati 💜</h1>
   <p>May your life glow like the moon 🌙</p>
-  <div style="font-size:32px;">🎉 🎈 🌸</div>
+  <div class="flowers">🌸 🎉 🎈 🌹</div>
 </div>
 
 <script>
 let x = 20;
-let reachedCastle = false;
+let arrived = false;
 
-const doctor = document.getElementById("doctorScooty");
+const road = document.getElementById("roadScene");
+const cake = document.getElementById("cakeScene");
+const birthday = document.getElementById("birthdayScene");
+const doctor = document.getElementById("doctor");
 const hint = document.getElementById("hint");
 const music = document.getElementById("bgMusic");
 
-/* MOVE */
-document.body.addEventListener("pointerdown", () => {
+/* 🎵 Start music on first interaction */
+function startMusic() {
   music.play().catch(()=>{});
+}
 
-  if (reachedCastle) return;
+/* 🛵 MOVE DOCTOR */
+road.addEventListener("pointerdown", () => {
+  startMusic();
+  if (arrived) return;
 
   x += 40;
   doctor.style.left = x + "px";
 
   if (x >= window.innerWidth - 220) {
-    reachedCastle = true;
+    arrived = true;
     hint.innerText = "She has arrived ✨ Tap the castle 🏰";
   }
 });
 
-/* CASTLE */
+/* 🏰 CASTLE → CAKE */
 document.getElementById("castle").addEventListener("pointerdown", (e) => {
   e.stopPropagation();
-  if (!reachedCastle) return;
+  if (!arrived) return;
 
-  roadScene.classList.add("hidden");
-  cakeScene.classList.remove("hidden");
+  road.classList.add("hidden");
+  cake.classList.remove("hidden");
 });
 
-/* 🎂 CAKE — FULLSCREEN TAP */
-document.getElementById("cakeScene").addEventListener("pointerdown", () => {
-  cakeScene.classList.add("hidden");
-  birthdayScene.classList.remove("hidden");
+/* 🎂 CAKE → BIRTHDAY (FULL SCREEN TAP) */
+cake.addEventListener("pointerdown", () => {
+  cake.classList.add("hidden");
+  birthday.classList.remove("hidden");
 });
 </script>
 
