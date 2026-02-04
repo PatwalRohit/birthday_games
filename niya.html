@@ -39,7 +39,7 @@ body.night {
 }
 
 /* ---------- FLOATING BACKGROUND ---------- */
-.bg-marquee {
+/* .bg-marquee {
   position: fixed;
   inset: 0;
   display: flex;
@@ -50,6 +50,28 @@ body.night {
   opacity: 0.15;
   z-index: 0;
   pointer-events: none;
+} */
+
+  .bg-marquee {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+  .scroll-vert {
+  display: flex;
+  flex-direction: column;
+  animation: scrollDown 20s linear infinite;
+}
+
+.scroll-vert img {
+  width: 100px; /* adjust size as needed */
+  margin-bottom: 10px;
+  opacity: 0.15;
+  object-fit: cover;
+  filter: blur(1px);
 }
 
 .bg-marquee img {
@@ -64,6 +86,11 @@ body.night {
 @keyframes floatDiagonal {
   from { transform: translate(0,0); }
   to   { transform: translate(-25%, -25%); }
+}
+
+  @keyframes scrollDown {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); } /* scroll half of duplicated images */
 }
 
 /* ---------- GAME WRAPPER ---------- */
@@ -217,6 +244,17 @@ p {
   <img src="src/files/images/IMG_6206.jpg">
   <img src="src/files/images/IMG_6207.jpg">
   <img src="src/files/images/IMG_6208.jpg">
+  <img src="src/files/images/IMG_6209.jpg">
+  <img src="src/files/images/IMG_6210.jpg">
+  <img src="src/files/images/IMG_6211.jpg">
+  <img src="src/files/images/IMG_6212.jpg">
+  <img src="src/files/images/IMG_6213.jpg">
+  <img src="src/files/images/IMG_6214.jpg">
+  <img src="src/files/images/IMG_6215.jpg">
+  <img src="src/files/images/IMG_6216.jpg">
+  <img src="src/files/images/IMG_6218.jpg">
+  <img src="src/files/images/IMG_6219.jpg">
+  <img src="src/files/images/IMG_2021.jpeg">
 </div>
 
 <div class="game-wrapper">
