@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Niyati 💜</title>
+<style>
+body {
+margin: 0;
+font-family: 'Trebuchet MS', sans-serif;
+background: radial-gradient(circle, #d8c9ff, #6b4fa3);
+color: white;
+text-align: center;
+overflow: hidden;
+}
+.scene { display: none; padding: 30px 15px; }
+.active { display: block; }
+button {
+margin-top: 18px;
+padding: 12px 26px;
+border-radius: 25px;
+border: none;
+font-size: 15px;
+background: white;
+color: #6b4fa3;
+cursor: pointer;
+}
+.puzzle {
+display: flex;
+justify-content: center;
+gap: 14px;
+margin-top: 22px;
+flex-wrap: wrap;
+}
+.piece {
+background: rgba(255,255,255,0.95);
+color: #6b4fa3;
+padding: 14px 22px;
+border-radius: 22px;
+cursor: pointer;
+font-size: 18px;
+}
+.slot {
+border: 2px dashed rgba(255,255,255,0.7);
+width: 120px;
+height: 45px;
+border-radius: 20px;
+line-height: 45px;
+}
+.cake { font-size: 90px; cursor: pointer; }
+.castle { font-size: 90px; margin-top: 10px; }
+.rose, .lantern {
+position: absolute;
+font-size: 26px;
+}
+.rose {
+top: -30px;
+animation: fall 4s linear forwards;
+}
+.lantern {
+bottom: 0;
+animation: rise 6s linear forwards;
+}
+@keyframes fall {
+to { transform: translateY(110vh); opacity: 0; }
+}
+@keyframes rise {
+to { transform: translateY(-120vh); opacity: 0; }
+}
+#scene4 h1, #scene4 h2 {
+text-shadow: 0 0 14px rgba(220,200,255,0.95);
+animation: glow 3s ease-in-out infinite;
+}
+@keyframes glow {
+0%,100% { opacity: 1; }
+50% { opacity: 0.85; }
+}
+</style>
+</head>
+<body>
+<!-- 🎵 AUDIO -->
+<audio id="bgMusic" loop autoplay playsinline>
+<source src="bg-music.mp3" type="audio/mpeg">
+</audio>
+<audio id="bellSound" playsinline>
+<source src="bell.mp3" type="audio/mpeg">
+</audio>
+<!-- 🌙 SCENE 1 -->
+<div id="scene1" class="scene active">
+<h1>🌙 A Gentle Birthday Surprise 🌙</h1>
+<p>Some magic only works when placed in the right order…</p>
+<button onclick="go(2)">Begin</button>
+</div>
+<!-- 🧩 SCENE 2 -->
+<div id="scene2" class="scene">
+<h2>Arrange with your heart 💜</h2>
+<div class="puzzle">
+<div class="piece" onclick="select(this)">🌙 Moon</div>
+<div class="piece" onclick="select(this)">🏮 Light</div>
+<div class="piece" onclick="select(this)">💜 Heart</div>
+</div>
+<h3>Place them here</h3>
+<div class="puzzle">
+<div class="slot" onclick="place(this)"></div>
+<div class="slot" onclick="place(this)"></div>
+<div class="slot" onclick="place(this)"></div>
+</div>
+<button onclick="hint()">Hint 💡</button>
+</div>
+<!-- 🎂 SCENE 3 -->
+<div id="scene3" class="scene">
+<h2>A small surprise waits 🎂</h2>
+<p>Tap the cake to cut it 🍍</p>
+<div class="cake" onclick="celebrate()">🍍🎂</div>
+</div>
+<!-- 🎉 SCENE 4 -->
+<div id="scene4" class="scene">
+<div class="castle">🏰✨</div>
+<h1>Happy Birthday</h1>
+<h2>Dear Niyati 💜</h2>
+<p>
+May your days glow like lanterns,<br>
+feel calm like moonlight,<br>
+and stay rooted in love & faith.
+</p>
+</div>
+<script>
+/* 🎶 SMART AUTOPLAY (Android + iPhone fallback) */
+const bgMusic = document.getElementById("bgMusic");
+let musicStarted = false;
+window.addEventListener("load", () => {
+bgMusic.volume = 0.28;
+bgMusic.play().then(()=>musicStarted=true).catch(()=>{});
+});
+document.addEventListener("touchstart", startMusicOnce, { once:true });
+document.addEventListener("click", startMusicOnce, { once:true });
+function startMusicOnce(){
+if(!musicStarted){
+bgMusic.volume = 0.28;
+bgMusic.play();
+musicStarted = true;
+}
+}
+/* 🎬 SCENE CONTROL */
+function go(n){
+document.querySelectorAll(".scene").forEach(s=>s.classList.remove("active"));
+document.getElementById("scene"+n).classList.add("active");
+}
+/* 🧩 PUZZLE */
+let selected = null;
+function select(el){ selected = el.innerText; }
+function place(slot){
+if(!selected || slot.innerText) return;
+slot.innerText = selected;
+selected = null;
+checkPuzzle();
+}
+function hint(){
+alert("Moon shows the way 🌙\nLight follows 🏮\nHeart feels 💜");
+}
+function checkPuzzle(){
+const slots = document.querySelectorAll(".slot");
+const current = [...slots].map(s=>s.innerText);
+const answer = ["🌙 Moon","🏮 Light","💜 Heart"];
+if(current.includes("")) return;
+if(JSON.stringify(current) === JSON.stringify(answer)){
+setTimeout(()=>go(3),600);
+} else {
+alert("Almost ✨ Try again.");
+slots.forEach(s=>s.innerText="");
+}
+}
+/* 🎂 CELEBRATION */
+function celebrate(){
+go(4);
+bgMusic.volume = 0.18;
+const bell = document.getElementById("bellSound");
+bell.volume = 0.5;
+bell.play();
+if(navigator.vibrate){
+navigator.vibrate([120,60,120]);
+}
+setTimeout(lanternsRise, 300);
+setTimeout(rosesFall, 1300);
+}
+function lanternsRise(){
+for(let i=0;i<14;i++){
+let l=document.createElement("div");
+l.className="lantern";
+l.innerHTML="🏮";
+l.style.left=Math.random()*100+"vw";
+document.body.appendChild(l);
+setTimeout(()=>l.remove(),6000);
+}
+}
+function rosesFall(){
+for(let i=0;i<30;i++){
+let r=document.createElement("div");
+r.className="rose";
+r.innerHTML="🌹";
+r.style.left=Math.random()*100+"vw";
+document.body.appendChild(r);
+setTimeout(()=>r.remove(),4000);
+}
+}
+</script>
+</body>
+</html>

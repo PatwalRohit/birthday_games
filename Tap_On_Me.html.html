@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Moon Wishes 🌙</title>
+<style>
+body {
+margin: 0;
+font-family: 'Arial', sans-serif;
+background: linear-gradient(#6a5acd, #b19cd9);
+color: white;
+text-align: center;
+}
+.screen {
+display: none;
+padding: 40px 20px;
+}
+.active {
+display: block;
+}
+button {
+padding: 12px 22px;
+font-size: 16px;
+border-radius: 20px;
+border: none;
+background: #fff;
+color: #6a5acd;
+cursor: pointer;
+}
+.icons span {
+font-size: 50px;
+margin: 20px;
+cursor: pointer;
+}
+.popup {
+background: rgba(255,255,255,0.9);
+color: #6a5acd;
+padding: 15px;
+border-radius: 15px;
+margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<div id="start" class="screen active">
+<h1>🌙 Moon Wishes 🌙</h1>
+<p>Tonight the moon feels special…<br>Shinchan needs your help ✨</p>
+<button onclick="nextScreen()">Start the Birthday Game</button>
+</div>
+<div id="game" class="screen">
+<h2>Collect the Wishes 💫</h2>
+<div class="icons">
+<span onclick="showMsg(1)">🌙</span>
+<span onclick="showMsg(2)">🎵</span>
+<span onclick="showMsg(3)">🍍</span>
+</div>
+<div id="msg"></div>
+</div>
+<div id="end" class="screen">
+<h1>🎂 Happy Birthday 🎂</h1>
+<p>
+Stay the way you are.<br>
+Gentle. Kind. Real.<br><br>
+That’s already enough 🌸
+</p>
+</div>
+<script>
+let count = 0;
+function nextScreen() {
+document.getElementById("start").classList.remove("active");
+document.getElementById("game").classList.add("active");
+}
+function showMsg(n) {
+const messages = {
+1: "Some people feel calm like the moon. You’re one of them 🌙",
+2: "Music understands what words can’t. So does your heart 🎵",
+3: "Simple joys. Kind soul. Pineapple cake energy ✨🍍"
+};
+document.getElementById("msg").innerHTML =
+`<div class='popup'>${messages[n]}</div>`;
+count++;
+if (count >= 3) {
+setTimeout(() => {
+document.getElementById("game").classList.remove("active");
+document.getElementById("end").classList.add("active");
+}, 1500);
+}
+}
+</script>
+</body>
+</html>

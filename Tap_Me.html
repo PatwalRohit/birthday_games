@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>A Lantern Night for Niyati</title>
+<style>
+body {
+margin: 0;
+background: radial-gradient(#6b4fa3, #b79fe5);
+font-family: 'Verdana', sans-serif;
+color: white;
+overflow: hidden;
+}
+.scene {
+display: none;
+text-align: center;
+padding: 40px 20px;
+}
+.active { display: block; }
+button {
+padding: 14px 28px;
+border-radius: 30px;
+border: none;
+background: #fff;
+color: #6b4fa3;
+font-size: 16px;
+cursor: pointer;
+margin-top: 20px;
+}
+.character {
+font-size: 70px;
+animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+0%,100% { transform: translateY(0); }
+50% { transform: translateY(-15px); }
+}
+.lantern {
+position: absolute;
+font-size: 30px;
+animation: glow 2s infinite alternate;
+cursor: pointer;
+}
+@keyframes glow {
+from { opacity: 0.6; }
+to { opacity: 1; }
+}
+.castle {
+font-size: 90px;
+}
+.item {
+font-size: 40px;
+cursor: pointer;
+margin: 15px;
+}
+.cake {
+font-size: 80px;
+cursor: pointer;
+}
+.rose {
+position: absolute;
+top: -40px;
+font-size: 26px;
+animation: fall 4s linear forwards;
+}
+@keyframes fall {
+to { transform: translateY(110vh); opacity: 0; }
+}
+.lantern-fly {
+position: absolute;
+bottom: 0;
+font-size: 24px;
+animation: rise 6s linear forwards;
+}
+@keyframes rise {
+to { transform: translateY(-120vh); opacity: 0; }
+}
+</style>
+</head>
+<body>
+<!-- SCENE 1 -->
+<div id="scene1" class="scene active">
+<h1>🌙 A Lantern Night 🌙</h1>
+<p>Rapunzel feels tonight is special…</p>
+<div class="character">👸</div>
+<p>Help her follow the lanterns ✨</p>
+<button onclick="startLanterns()">Begin Journey</button>
+</div>
+<!-- SCENE 2 -->
+<div id="scene2" class="scene">
+<h2>The Castle Glows 🏰</h2>
+<div class="castle">🏰</div>
+<p>Flynn Rider is preparing a surprise…</p>
+<div class="character">‍👼</div>
+<p>Tap the items to decorate</p>
+<div>
+<span class="item" onclick="decorate()">🎀</span>
+<span class="item" onclick="decorate()">🎶</span>
+<span class="item" onclick="decorate()">🌸</span>
+</div>
+</div>
+<!-- SCENE 3 -->
+<div id="scene3" class="scene">
+<h2>Your Cake Awaits 🎂</h2>
+<p>Pineapple cake, made with care</p>
+<div class="cake" onclick="cutCake()">🍍🎂</div>
+<p><small>Tap to cut the cake</small></p>
+</div>
+<!-- SCENE 4 -->
+<div id="scene4" class="scene">
+<h1>🎉 Happy Birthday 🎉</h1>
+<h2>Dear Niyati 💜</h2>
+<p>
+May your life glow like lanterns,<br>
+stay pure like prayers,<br>
+and gentle like moonlight.
+</p>
+</div>
+<script>
+function go(n){
+document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+document.getElementById('scene'+n).classList.add('active');
+}
+function startLanterns(){
+go(2);
+for(let i=0;i<8;i++){
+let l=document.createElement("div");
+l.className="lantern";
+l.innerHTML="🏮";
+l.style.left=Math.random()*100+"vw";
+l.style.top=Math.random()*60+"vh";
+document.body.appendChild(l);
+l.onclick=()=>l.remove();
+}
+}
+let decor=0;
+function decorate(){
+decor++;
+if(decor>=3) setTimeout(()=>go(3),600);
+}
+function cutCake(){
+go(4);
+for(let i=0;i<30;i++){
+let r=document.createElement("div");
+r.className="rose";
+r.innerHTML="🌹";
+r.style.left=Math.random()*100+"vw";
+document.body.appendChild(r);
+setTimeout(()=>r.remove(),4000);
+}
+for(let i=0;i<12;i++){
+let lan=document.createElement("div");
+lan.className="lantern-fly";
+lan.innerHTML="🏮";
+lan.style.left=Math.random()*100+"vw";
+document.body.appendChild(lan);
+setTimeout(()=>lan.remove(),6000);
+}
+}
+</script>
+</body>
+</html>
