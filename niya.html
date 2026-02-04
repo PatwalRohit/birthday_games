@@ -6,13 +6,24 @@
 <title>Niya's Town 🎂</title>
 
 <style>
+/* ---------- ROOT SCALE ---------- */
+:root {
+  --tile-size: clamp(72px, 18vw, 110px);
+  --radius: 16px;
+}
+
 /* ---------- GLOBAL ---------- */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: system-ui, -apple-system, Arial, sans-serif;
   text-align: center;
   transition: background 6s;
   overflow-x: hidden;
+  min-height: 100dvh;
 }
 
 body.day {
@@ -35,12 +46,12 @@ body.night {
   animation: floatDiagonal 70s linear infinite;
   opacity: 0.15;
   z-index: 0;
-  overflow: hidden;
+  pointer-events: none;
 }
 
 .bg-marquee img {
-  width: min(12vw, 80px);
-  height: min(12vw, 80px);
+  width: clamp(48px, 12vw, 90px);
+  height: clamp(48px, 12vw, 90px);
   object-fit: cover;
   margin: 6px;
   border-radius: 12px;
@@ -56,28 +67,29 @@ body.night {
 .game-wrapper {
   position: relative;
   z-index: 2;
-  padding: 15px 10px 30px 10px;
+  padding: clamp(12px, 4vw, 28px);
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 /* ---------- HEADINGS ---------- */
 h1 {
-  font-size: 1.6rem;
-  margin-bottom: 5px;
+  font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+  margin-bottom: 6px;
 }
 
 p {
-  font-size: 1rem;
-  margin-bottom: 15px;
+  font-size: clamp(0.95rem, 3.5vw, 1.15rem);
+  margin-bottom: 14px;
 }
 
 /* ---------- LOVE METER ---------- */
 .love-meter {
-  width: 90%;
-  max-width: 300px;
-  height: 20px;
+  width: min(92%, 360px);
+  height: 18px;
   background: #ddd;
   border-radius: 20px;
-  margin: 15px auto;
+  margin: 14px auto;
   overflow: hidden;
 }
 
@@ -85,46 +97,52 @@ p {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, #ff4d6d, #ff99aa);
-  transition: width 0.8s;
+  transition: width 0.6s ease;
 }
 
 /* ---------- TOWN GRID ---------- */
 .town {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 10px;
-  justify-items: center;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(var(--tile-size), 1fr));
+  gap: clamp(10px, 3vw, 18px);
+  margin-top: 22px;
+  width: 100%;
 }
 
+/* ---------- TILE ---------- */
 .tile {
-  width: 80px;
-  height: 80px;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: var(--tile-size);
+  margin: 0 auto;
   background: #ffffffdd;
-  border-radius: 14px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 1.1rem;
-  transition: transform 0.2s;
+  font-size: clamp(0.95rem, 3.5vw, 1.2rem);
+  transition: transform 0.2s ease;
+  user-select: none;
 }
 
-.tile:hover { transform: scale(1.08); }
+.tile:hover {
+  transform: scale(1.08);
+}
 
 .birthday {
   background: #ffe6f0;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 /* ---------- MESSAGE ---------- */
 #message {
   margin-top: 18px;
-  font-size: 16px;
-  min-height: 50px;
-  word-wrap: break-word;
+  font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+  min-height: 48px;
+  padding: 0 10px;
 }
 
 /* ---------- HEART CONFETTI ---------- */
@@ -137,7 +155,7 @@ p {
 
 @keyframes fall {
   0% { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(120px) scale(1.5); opacity: 0; }
+  100% { transform: translateY(140px) scale(1.6); opacity: 0; }
 }
 
 /* ---------- POPUP ---------- */
@@ -149,40 +167,39 @@ p {
   align-items: center;
   justify-content: center;
   z-index: 10;
-  padding: 10px;
+  padding: 16px;
 }
 
 .popup-box {
   background: white;
-  padding: 20px;
-  border-radius: 18px;
-  max-width: 90%;
+  padding: clamp(16px, 4vw, 26px);
+  border-radius: 20px;
+  max-width: 420px;
+  width: 100%;
   text-align: center;
   color: #000;
 }
 
+.popup-box h2 {
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+}
+
+.popup-box p {
+  font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+}
+
 .popup-box button {
-  margin-top: 15px;
-  padding: 8px 18px;
+  margin-top: 16px;
+  padding: 10px 22px;
   border: none;
-  border-radius: 20px;
+  border-radius: 22px;
   background: #ff4d6d;
   color: white;
   cursor: pointer;
   font-size: 1rem;
 }
-
-/* ---------- RESPONSIVE FONT SIZES ---------- */
-@media (min-width: 600px) {
-  h1 { font-size: 2rem; }
-  p { font-size: 1.1rem; }
-  .tile { width: 90px; height: 90px; font-size: 1.2rem; }
-}
-
-@media (min-width: 900px) {
-  .tile { width: 95px; height: 95px; font-size: 1.3rem; }
-}
 </style>
+
 </head>
 
 <body class="day">
