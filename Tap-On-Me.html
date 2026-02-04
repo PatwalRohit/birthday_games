@@ -14,8 +14,8 @@ body {
   color: white;
 }
 
-/* COMMON */
 .hidden { display: none; }
+
 .center {
   display: flex;
   flex-direction: column;
@@ -27,56 +27,37 @@ body {
   color: #3c2a6a;
 }
 
-/* ROAD SCENE */
-#roadScene {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-}
+/* ROAD */
+#roadScene { position: relative; height: 100vh; }
 
-/* MOON */
-.moon {
-  position: absolute;
-  top: 25px;
-  right: 25px;
-  font-size: 80px;
-}
+.moon { position: absolute; top: 25px; right: 25px; font-size: 80px; }
 
-/* STARS */
 .star {
   position: absolute;
   font-size: 20px;
   animation: twinkle 2s infinite alternate;
 }
+@keyframes twinkle { from {opacity:.4} to {opacity:1} }
 
-@keyframes twinkle {
-  from { opacity: 0.4; }
-  to { opacity: 1; }
-}
-
-/* FAIRY */
 .fairy {
   position: absolute;
   font-size: 28px;
   animation: float 4s infinite ease-in-out;
 }
-
 @keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0); }
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-20px)}
+  100%{transform:translateY(0)}
 }
 
-/* DOCTOR ON SCOOTY */
 #doctorScooty {
   position: absolute;
   bottom: 70px;
   left: 20px;
   font-size: 42px;
-  transition: left 0.3s;
+  transition: left .3s;
 }
 
-/* CASTLE */
 #castle {
   position: absolute;
   bottom: 65px;
@@ -85,21 +66,23 @@ body {
   cursor: pointer;
 }
 
-/* HINT MESSAGE */
 #hint {
   position: absolute;
   top: 15px;
   width: 100%;
   text-align: center;
   font-size: 18px;
-  padding: 0 10px;
 }
 
-/* CAKE */
+/* 🎂 IMPORTANT FIX */
+#cakeWrapper {
+  padding: 30px;
+}
+
 #cake {
-  font-size: 80px;
+  font-size: 90px;
   cursor: pointer;
-  margin-top: 20px;
+  user-select: none;
 }
 
 /* FLOWERS */
@@ -107,7 +90,6 @@ body {
   font-size: 32px;
   animation: fall 3s linear infinite;
 }
-
 @keyframes fall {
   from { transform: translateY(-120px); opacity: 1; }
   to { transform: translateY(300px); opacity: 0; }
@@ -127,7 +109,6 @@ body {
 
   <div class="star" style="top:60px;left:50px;">✨</div>
   <div class="star" style="top:120px;left:200px;">✨</div>
-  <div class="star" style="top:90px;left:320px;">✨</div>
 
   <div class="fairy" style="top:200px;left:80px;">🧚‍♀️</div>
   <div class="fairy" style="top:240px;right:120px;">🧚‍♀️</div>
@@ -135,30 +116,26 @@ body {
   <div id="doctorScooty">👩‍⚕️🛵</div>
   <div id="castle">🏰</div>
 
-  <div id="hint">
-    Tap anywhere to help Rapunzel reach her castle 🏰
-  </div>
+  <div id="hint">Tap anywhere to help Rapunzel reach her castle 🏰</div>
 </div>
 
 <!-- 🎂 CAKE SCENE -->
 <div id="cakeScene" class="hidden center">
   <h2>She reached safely 💜</h2>
   <p>Now make a wish and tap the cake 🎂</p>
-  <div id="cake">🍍🎂</div>
+
+  <!-- IMPORTANT: wrapper -->
+  <div id="cakeWrapper">
+    <div id="cake">🍍🎂</div>
+  </div>
 </div>
 
 <!-- 🎉 BIRTHDAY SCENE -->
 <div id="birthdayScene" class="hidden center">
   <div style="font-size:50px;">👩‍⚕️🌸🌹</div>
-  <h1>
-    Happy Birthday<br>
-    Dear Niyati 💜
-  </h1>
-  <p style="font-size:18px;">
-    May your life always glow like the moon 🌙  
-    and your heart stay as kind as it is today.
-  </p>
-  <div class="flowers">🌸 🌹 🌸 🎉 🎈</div>
+  <h1>Happy Birthday<br>Dear Niyati 💜</h1>
+  <p>May your life glow like the moon 🌙</p>
+  <div class="flowers">🌸 🌹 🎉 🎈</div>
 </div>
 
 <script>
@@ -170,7 +147,12 @@ const castle = document.getElementById("castle");
 const hint = document.getElementById("hint");
 const music = document.getElementById("bgMusic");
 
-/* MOVE RAPUNZEL */
+function showBirthday() {
+  document.getElementById("cakeScene").classList.add("hidden");
+  document.getElementById("birthdayScene").classList.remove("hidden");
+}
+
+/* MOVE */
 document.body.addEventListener("click", () => {
   music.play().catch(()=>{});
 
@@ -186,19 +168,18 @@ document.body.addEventListener("click", () => {
   }
 });
 
-/* CASTLE TAP → CAKE */
-castle.addEventListener("click", () => {
+/* CASTLE */
+castle.addEventListener("click", (e) => {
+  e.stopPropagation();
   if (!reachedCastle) return;
 
   document.getElementById("roadScene").classList.add("hidden");
   document.getElementById("cakeScene").classList.remove("hidden");
 });
 
-/* CAKE TAP → BIRTHDAY */
-document.getElementById("cake").addEventListener("click", () => {
-  document.getElementById("cakeScene").classList.add("hidden");
-  document.getElementById("birthdayScene").classList.remove("hidden");
-});
+/* 🎂 FIXED CAKE TAP (works everywhere) */
+document.getElementById("cakeWrapper").addEventListener("click", showBirthday);
+document.getElementById("cake").addEventListener("click", showBirthday);
 </script>
 
 </body>
