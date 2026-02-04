@@ -33,6 +33,9 @@ body.day {
 body.night {
   background: linear-gradient(#0f2027, #203a43, #2c5364);
   color: #fff;
+  .tile,.birthday {
+    background:lightcoral !important;
+  }
 }
 
 /* ---------- FLOATING BACKGROUND ---------- */
@@ -50,11 +53,11 @@ body.night {
 }
 
 .bg-marquee img {
-  width: clamp(48px, 12vw, 90px);
-  height: clamp(48px, 12vw, 90px);
+  width: -webkit-fill-available;
+  /* height: clamp(48px, 12vw, 90px); */
   object-fit: cover;
-  margin: 6px;
-  border-radius: 12px;
+  /* margin: 6px; */
+  /* border-radius: 12px; */
   filter: blur(1px);
 }
 
