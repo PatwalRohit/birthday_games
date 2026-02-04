@@ -11,7 +11,6 @@ body {
   overflow: hidden;
   font-family: 'Georgia', serif;
   background: linear-gradient(#3c2a6a, #9b8ad8);
-  color: white;
 }
 
 .hidden { display: none; }
@@ -28,71 +27,25 @@ body {
 }
 
 /* ROAD */
-#roadScene { position: relative; height: 100vh; }
+#roadScene { position: relative; height: 100vh; color:white; }
+.moon { position:absolute; top:25px; right:25px; font-size:80px; }
+#doctorScooty { position:absolute; bottom:70px; left:20px; font-size:42px; transition:left .3s; }
+#castle { position:absolute; bottom:65px; right:20px; font-size:64px; }
+#hint { position:absolute; top:15px; width:100%; text-align:center; }
 
-.moon { position: absolute; top: 25px; right: 25px; font-size: 80px; }
-
-.star {
-  position: absolute;
-  font-size: 20px;
-  animation: twinkle 2s infinite alternate;
-}
-@keyframes twinkle { from {opacity:.4} to {opacity:1} }
-
-.fairy {
-  position: absolute;
-  font-size: 28px;
-  animation: float 4s infinite ease-in-out;
-}
-@keyframes float {
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-20px)}
-  100%{transform:translateY(0)}
-}
-
-#doctorScooty {
-  position: absolute;
-  bottom: 70px;
-  left: 20px;
-  font-size: 42px;
-  transition: left .3s;
-}
-
-#castle {
-  position: absolute;
-  bottom: 65px;
-  right: 20px;
-  font-size: 64px;
+/* CAKE FULLSCREEN TAP */
+#cakeScene {
   cursor: pointer;
 }
 
-#hint {
-  position: absolute;
-  top: 15px;
-  width: 100%;
-  text-align: center;
-  font-size: 18px;
-}
-
-/* 🎂 IMPORTANT FIX */
-#cakeWrapper {
-  padding: 30px;
-}
-
-#cake {
+#cakeEmoji {
   font-size: 90px;
-  cursor: pointer;
-  user-select: none;
+  margin: 20px 0;
 }
 
-/* FLOWERS */
-.flowers {
-  font-size: 32px;
-  animation: fall 3s linear infinite;
-}
-@keyframes fall {
-  from { transform: translateY(-120px); opacity: 1; }
-  to { transform: translateY(300px); opacity: 0; }
+.tapHint {
+  font-size: 16px;
+  opacity: 0.7;
 }
 </style>
 </head>
@@ -103,39 +56,27 @@ body {
   <source src="bg-music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- 🌙 ROAD SCENE -->
+<!-- ROAD -->
 <div id="roadScene">
   <div class="moon">🌕</div>
-
-  <div class="star" style="top:60px;left:50px;">✨</div>
-  <div class="star" style="top:120px;left:200px;">✨</div>
-
-  <div class="fairy" style="top:200px;left:80px;">🧚‍♀️</div>
-  <div class="fairy" style="top:240px;right:120px;">🧚‍♀️</div>
-
   <div id="doctorScooty">👩‍⚕️🛵</div>
   <div id="castle">🏰</div>
-
   <div id="hint">Tap anywhere to help Rapunzel reach her castle 🏰</div>
 </div>
 
-<!-- 🎂 CAKE SCENE -->
+<!-- CAKE -->
 <div id="cakeScene" class="hidden center">
   <h2>She reached safely 💜</h2>
-  <p>Now make a wish and tap the cake 🎂</p>
-
-  <!-- IMPORTANT: wrapper -->
-  <div id="cakeWrapper">
-    <div id="cake">🍍🎂</div>
-  </div>
+  <div id="cakeEmoji">🍍🎂</div>
+  <div class="tapHint">Tap anywhere to cut the cake 🎂</div>
 </div>
 
-<!-- 🎉 BIRTHDAY SCENE -->
+<!-- BIRTHDAY -->
 <div id="birthdayScene" class="hidden center">
-  <div style="font-size:50px;">👩‍⚕️🌸🌹</div>
+  <div style="font-size:48px;">👩‍⚕️🌸🌹</div>
   <h1>Happy Birthday<br>Dear Niyati 💜</h1>
   <p>May your life glow like the moon 🌙</p>
-  <div class="flowers">🌸 🌹 🎉 🎈</div>
+  <div style="font-size:32px;">🎉 🎈 🌸</div>
 </div>
 
 <script>
@@ -143,17 +84,11 @@ let x = 20;
 let reachedCastle = false;
 
 const doctor = document.getElementById("doctorScooty");
-const castle = document.getElementById("castle");
 const hint = document.getElementById("hint");
 const music = document.getElementById("bgMusic");
 
-function showBirthday() {
-  document.getElementById("cakeScene").classList.add("hidden");
-  document.getElementById("birthdayScene").classList.remove("hidden");
-}
-
 /* MOVE */
-document.body.addEventListener("click", () => {
+document.body.addEventListener("pointerdown", () => {
   music.play().catch(()=>{});
 
   if (reachedCastle) return;
@@ -161,25 +96,26 @@ document.body.addEventListener("click", () => {
   x += 40;
   doctor.style.left = x + "px";
 
-  const stopPoint = window.innerWidth - 220;
-  if (x >= stopPoint) {
+  if (x >= window.innerWidth - 220) {
     reachedCastle = true;
     hint.innerText = "She has arrived ✨ Tap the castle 🏰";
   }
 });
 
 /* CASTLE */
-castle.addEventListener("click", (e) => {
+document.getElementById("castle").addEventListener("pointerdown", (e) => {
   e.stopPropagation();
   if (!reachedCastle) return;
 
-  document.getElementById("roadScene").classList.add("hidden");
-  document.getElementById("cakeScene").classList.remove("hidden");
+  roadScene.classList.add("hidden");
+  cakeScene.classList.remove("hidden");
 });
 
-/* 🎂 FIXED CAKE TAP (works everywhere) */
-document.getElementById("cakeWrapper").addEventListener("click", showBirthday);
-document.getElementById("cake").addEventListener("click", showBirthday);
+/* 🎂 CAKE — FULLSCREEN TAP */
+document.getElementById("cakeScene").addEventListener("pointerdown", () => {
+  cakeScene.classList.add("hidden");
+  birthdayScene.classList.remove("hidden");
+});
 </script>
 
 </body>
