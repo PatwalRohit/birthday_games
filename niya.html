@@ -39,44 +39,20 @@ body.night {
 }
 
 /* ---------- FLOATING BACKGROUND ---------- */
-/* .bg-marquee {
+.bg-marquee {
   position: fixed;
   inset: 0;
   display: flex;
+   flex-direction: column; /* stack images vertically */
   flex-wrap: wrap;
-  justify-content: center;
+  /* justify-content: center; */
+  justify-content: flex-start;
   align-items: center;
-  animation: floatDiagonal 70s linear infinite;
+  /* animation: floatDiagonal 70s linear infinite; */
+    animation: floatVertical 20s linear infinite;
   opacity: 0.15;
   z-index: 0;
   pointer-events: none;
-} */
-
-  .bg-marquee {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  z-index: 0;
-  pointer-events: none;
-      opacity: 0.15;
-    display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
-
-  .scroll-vert {
-  display: flex;
-  flex-direction: column;
-  animation: scrollDown 20s linear infinite;
-}
-
-.scroll-vert img {
-  width: 100px; /* adjust size as needed */
-  margin-bottom: 10px;
-  opacity: 0.15;
-  object-fit: cover;
-  filter: blur(1px);
 }
 
 .bg-marquee img {
@@ -88,9 +64,14 @@ body.night {
   filter: blur(1px);
 }
 
-@keyframes floatDiagonal {
+/* @keyframes floatDiagonal {
   from { transform: translate(0,0); }
   to   { transform: translate(-25%, -25%); }
+} */
+
+  @keyframes floatVertical {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
 }
 
   @keyframes scrollDown {
@@ -241,7 +222,7 @@ p {
 
 <!-- 🌸 BACKGROUND -->
 <div class="bg-marquee">
-  <div class="scroll-vert">
+  
   <img src="src/files/images/IMG_6201.jpg">
   <img src="src/files/images/IMG_6202.jpg">
   <img src="src/files/images/IMG_6203.jpg">
@@ -261,7 +242,7 @@ p {
   <img src="src/files/images/IMG_6218.jpg">
   <img src="src/files/images/IMG_6219.jpg">
   <img src="src/files/images/IMG_2021.jpeg">
-    </div>
+    
 </div>
 
 <div class="game-wrapper">
