@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niya's Town 🎂</title>
+
+<style>
+/* ---------- GLOBAL ---------- */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  transition: background 6s;
+  overflow-x: hidden;
+}
+
+body.day {
+  background: linear-gradient(#b3ecff, #e6f7ff);
+}
+
+body.night {
+  background: linear-gradient(#0f2027, #203a43, #2c5364);
+  color: #fff;
+}
+
+/* ---------- FLOATING BACKGROUND ---------- */
+.bg-marquee {
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  display: flex;
+  flex-wrap: wrap;
+  animation: floatDiagonal 70s linear infinite;
+  opacity: 0.15;
+  z-index: 0;
+}
+
+.bg-marquee img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin: 6px;
+  border-radius: 12px;
+  filter: blur(1px);
+}
+
+@keyframes floatDiagonal {
+  from { transform: translate(0,0); }
+  to   { transform: translate(-50%, -50%); }
+}
+
+/* ---------- GAME WRAPPER ---------- */
+.game-wrapper {
+  position: relative;
+  z-index: 2;
+  padding: 15px 10px 30px 10px;
+}
+
+/* ---------- HEADINGS ---------- */
+h1 {
+  font-size: 1.6rem;
+  margin-bottom: 5px;
+}
+
+p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+/* ---------- LOVE METER ---------- */
+.love-meter {
+  width: 90%;
+  max-width: 300px;
+  height: 20px;
+  background: #ddd;
+  border-radius: 20px;
+  margin: 15px auto;
+  overflow: hidden;
+}
+
+.love-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff4d6d, #ff99aa);
+  transition: width 0.8s;
+}
+
+/* ---------- TOWN GRID ---------- */
+.town {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+  justify-items: center;
+  margin-top: 20px;
+}
+
+.tile {
+  width: 80px;
+  height: 80px;
+  background: #ffffffdd;
+  border-radius: 14px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: transform 0.2s;
+}
+
+.tile:hover { transform: scale(1.08); }
+
+.birthday {
+  background: #ffe6f0;
+  font-weight: bold;
+}
+
+/* ---------- MESSAGE ---------- */
+#message {
+  margin-top: 18px;
+  font-size: 16px;
+  min-height: 50px;
+  word-wrap: break-word;
+}
+
+/* ---------- HEART CONFETTI ---------- */
+.heart {
+  position: fixed;
+  font-size: 18px;
+  animation: fall 2s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(120px) scale(1.5); opacity: 0; }
+}
+
+/* ---------- POPUP ---------- */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 10px;
+}
+
+.popup-box {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  max-width: 90%;
+  text-align: center;
+  color: #000;
+}
+
+.popup-box button {
+  margin-top: 15px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 20px;
+  background: #ff4d6d;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* ---------- RESPONSIVE FONT SIZES ---------- */
+@media (min-width: 600px) {
+  h1 { font-size: 2rem; }
+  p { font-size: 1.1rem; }
+  .tile { width: 90px; height: 90px; font-size: 1.2rem; }
+}
+
+@media (min-width: 900px) {
+  .tile { width: 95px; height: 95px; font-size: 1.3rem; }
+}
+</style>
+</head>
+
+<body class="day">
+
+<!-- 🌸 BACKGROUND -->
+<div class="bg-marquee">
+  <img src="src/files/images/IMG_6201.jpg">
+  <img src="src/files/images/IMG_6202.jpg">
+  <img src="src/files/images/IMG_6203.jpg">
+  <img src="src/files/images/IMG_6204.jpg">
+  <img src="src/files/images/IMG_6205.jpg">
+  <img src="src/files/images/IMG_6206.jpg">
+  <img src="src/files/images/IMG_6207.jpg">
+  <img src="src/files/images/IMG_6208.jpg">
+</div>
+
+<div class="game-wrapper">
+<h1>🏡 Welcome to Niya’s Town</h1>
+<p>Tap buildings to manage the town</p>
+
+<div class="love-meter">
+  <div class="love-fill" id="loveFill"></div>
+</div>
+❤️ Love Meter
+
+<div class="town">
+  <div class="tile" data-love="5" data-msg="🌾 Farm harvested!">🌾<br>Farm</div>
+  <div class="tile" data-love="5" data-msg="🏠 House upgraded!">🏠<br>House</div>
+  <div class="tile" data-love="5" data-msg="🌳 Park cleaned!">🌳<br>Park</div>
+  <div class="tile" data-love="5" data-msg="🚂 Train arrived!">🚂<br>Station</div>
+  <div class="tile" data-love="5" data-msg="🏪 Shop opened!">🏪<br>Shop</div>
+  <div class="tile" data-love="5" data-msg="🏫 School running!">🏫<br>School</div>
+  <div class="tile" data-love="5" data-msg="🏥 Hospital ready!">🏥<br>Hospital</div>
+  <div class="tile birthday" id="eventTile" data-love="40" data-msg="🎂 Happy Birthday Niya ❤️">
+    🎂<br>Event
+  </div>
+</div>
+
+<div id="message"></div>
+</div>
+
+<!-- 🎵 SONG -->
+<audio id="birthdaySong" src="src/files/audio/Erkenci_kus_music_।_Day_Dreamer_।_Erkenci_kus_Ring_tone_।(MP3_128K).mp3"></audio>
+
+<script>
+// JS logic stays the same
+const tiles = document.querySelectorAll('.tile');
+const msg = document.getElementById('message');
+const loveFill = document.getElementById('loveFill');
+const song = document.getElementById('birthdaySong');
+let love = 0;
+
+tiles.forEach(tile => {
+  tile.addEventListener('click', e => {
+    msg.innerHTML = tile.dataset.msg;
+    love = Math.min(100, love + Number(tile.dataset.love));
+    loveFill.style.width = love + "%";
+
+    if (navigator.vibrate) navigator.vibrate(120);
+
+    if (tile.id === "eventTile") {
+      song.play();
+      heartConfetti(e.clientX, e.clientY);
+      showPopup();
+    }
+
+    if (love === 100) endingPopup();
+  });
+});
+
+function heartConfetti(x, y) {
+  for (let i = 0; i < 12; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.innerHTML = '❤️';
+    h.style.left = (x + Math.random()*80 - 40) + 'px';
+    h.style.top = y + 'px';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 2000);
+  }
+}
+
+function showPopup() {
+  const pop = document.createElement('div');
+  pop.className = 'popup';
+  pop.innerHTML = `
+    <div class="popup-box">
+      <h2>🎉 Happy Birthday Niya 🎂</h2>
+      <p>
+        You are my favorite place,<br>
+        my happiest town,<br>
+        and my forever ❤️
+      </p>
+      <button onclick="this.closest('.popup').remove()">Close 💕</button>
+    </div>`;
+  document.body.appendChild(pop);
+}
+
+function endingPopup() {
+  const pop = document.createElement('div');
+  pop.className = 'popup';
+  pop.innerHTML = `
+    <div class="popup-box">
+      <h2>❤️ Love Level MAX ❤️</h2>
+      <p>
+        No upgrades needed.<br>
+        You’re already perfect.
+      </p>
+      <button onclick="this.closest('.popup').remove()">Always Yours 💖</button>
+    </div>`;
+  document.body.appendChild(pop);
+}
+
+setInterval(() => {
+  document.body.classList.toggle('night');
+  document.body.classList.toggle('day');
+}, 15000);
+</script>
+
+</body>
+</html>
